@@ -37,18 +37,25 @@ const viewReducer = (state = initialState, action) => {
     case 'HIDE_HOTSPOT':
       return {
         ...state,
-        showing: views.MAP }
+        showing: views.MAP
+      }
     case 'SHOW_LOGINFORM':
-        return {
-          ...state,
-          previousView: state.showing,
-          showing: views.LOGINFORM
-        }
+      return {
+        ...state,
+        previousView: state.showing,
+        showing: views.LOGINFORM
+      }
+    case 'SHOW_REGISTERFORM':
+      return {
+        ...state,
+        previousView: state.showing,
+        showing: views.REGISTERFORM
+      }
     case 'SET_USERLOGGEDIN':
-        return {
-          ...state,
-          isUserLoggedIn: action.loggedIn
-        }
+      return {
+        ...state,
+        isUserLoggedIn: action.loggedIn
+      }
     default:
       return state
   }
@@ -87,7 +94,7 @@ export const showHotspot = (id) => {
   }
 }
 
-export const showLoginForm = (id) => {
+export const showLoginForm = () => {
   return dispatch => {
       dispatch({
         type: 'SHOW_LOGINFORM'
@@ -95,7 +102,23 @@ export const showLoginForm = (id) => {
   }
 }
 
-export const hideLoginForm = (id) => {
+export const hideLoginForm = () => {
+  return dispatch => {
+      dispatch({
+        type: 'SHOW_PREVIOUS'
+      })
+  }
+}
+
+export const showRegisterForm = () => {
+  return dispatch => {
+      dispatch({
+        type: 'SHOW_REGISTERFORM'
+      })
+  }
+}
+
+export const hideRegisterForm = () => {
   return dispatch => {
       dispatch({
         type: 'SHOW_PREVIOUS'

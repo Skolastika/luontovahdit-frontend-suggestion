@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { Button, Modal, Form, Icon } from 'semantic-ui-react'
-import { hideLoginForm, setUserLoggedIn } from '../reducers/viewReducer'
+import { hideLoginForm, setUserLoggedIn, showRegisterForm } from '../reducers/viewReducer'
 import { views } from '../constants'
 import loginService from '../services/loginService'
 
@@ -67,7 +67,7 @@ class HotspotForm extends Component {
                 Kirjaudu sisään
                 <Icon name='sign in' />
               </Button>
-              <Button>
+              <Button onClick={ this.props.showRegisterForm }>
                 Rekisteröidy?
               </Button>
             </Form>
@@ -86,7 +86,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   hideLoginForm,
-  setUserLoggedIn
+  setUserLoggedIn,
+  showRegisterForm
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(HotspotForm))
