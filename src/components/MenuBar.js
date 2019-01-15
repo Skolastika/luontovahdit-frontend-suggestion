@@ -21,7 +21,7 @@ class MenuBar extends React.Component {
             <Dropdown.Menu>
               <Dropdown.Item onClick={ this.logout }>
                 Kirjaudu ulos
-                <Icon name='log out' />
+                <Icon style={{ paddingLeft: '5px' }} name='log out' />
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>

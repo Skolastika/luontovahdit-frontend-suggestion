@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import mapboxgl from 'mapbox-gl'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
+import MapboxLanguage from '@mapbox/mapbox-gl-language'
 import { addHotspot } from '../reducers/mapReducer'
 import { showHotspotForm, showHotspot } from '../reducers/viewReducer'
 import { setCurrentHotspot } from '../reducers/hotspotReducer'
@@ -26,8 +27,12 @@ class Map extends React.Component {
       maxBounds: bounds
     })
 
+    this.map.addControl(new MapboxLanguage({  defaultLanguage: 'mul' }))
+
     this.map.addControl(new MapboxGeocoder({
-      accessToken: mapboxgl.accessToken
+      accessToken: mapboxgl.accessToken,
+      language: 'fi',
+      placeholder: 'Etsi...'
     }))
 
     this.map.on('load', () => {

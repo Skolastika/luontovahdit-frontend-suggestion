@@ -6,6 +6,7 @@ import MenuBar from './components/MenuBar'
 import HotspotForm from './components/HotspotForm'
 import Hotspot from './components/Hotspot'
 import LoginForm from './components/LoginForm'
+import RegisterForm from './components/RegisterForm'
 import { initialiseHotspots } from './reducers/hotspotReducer'
 import { setHotspotsOnMap } from './reducers/mapReducer'
 
@@ -33,6 +34,7 @@ class App extends React.Component {
         <HotspotForm />
         <Hotspot />
         <LoginForm />
+        <RegisterForm />
       </div>
     );
   }

@@ -12,16 +12,16 @@ class RegisterForm extends Component {
   register = async (event) => {
     event.preventDefault()
 
-    if (event.target.username.value.length > 6 &&
-        event.target.password.value.length > 8 &&
-        event.target.screenname.value.length > 6 &&
-        event.target.email.value.length > 6 &&
+    if (event.target.username.value.length >= 6 &&
+        event.target.password.value.length >= 8 &&
+        event.target.screenname.value.length >= 6 &&
+        event.target.email.value.length >= 6 &&
         event.target.password.value === event.target.passwordConf.value) {
 
       const userObject = {
         username: event.target.username.value,
         password: event.target.password.value,
-        displayname: event.target.password.screenname,
+        displayname: event.target.screenname.value,
         email: event.target.email.value
       }
 
@@ -31,7 +31,7 @@ class RegisterForm extends Component {
 
       } catch (error) {
         console.log('Virhe rekisteröinnissä...')
-        console.log(this.props.error)
+        console.log(error)
       }
     } else {
       console.log('Tiedoissa jotain pielessä!')
@@ -68,7 +68,7 @@ class RegisterForm extends Component {
               <div>
                 Salasana uudelleen:
                 <Form.Input
-                  type="text"
+                  type="password"
                   name="passwordConf"
                 />
               </div>

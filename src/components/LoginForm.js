@@ -67,7 +67,7 @@ class HotspotForm extends Component {
                 Kirjaudu sisään
                 <Icon name='sign in' />
               </Button>
-              <Button onClick={ this.props.showRegisterForm }>
+              <Button type="button" onClick={ this.props.showRegisterForm() }>
                 Rekisteröidy?
               </Button>
             </Form>
