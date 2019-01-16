@@ -6,7 +6,7 @@ import { hideLoginForm, setUserLoggedIn, showRegisterForm } from '../reducers/vi
 import { views } from '../constants'
 import loginService from '../services/loginService'
 
-class HotspotForm extends Component {
+class LoginForm extends Component {
 
   open = () => {
     this.props.history.push('/login')
@@ -67,7 +67,7 @@ class HotspotForm extends Component {
                 Kirjaudu sisään
                 <Icon name='sign in' />
               </Button>
-              <Button type="button" onClick={ this.props.showRegisterForm() }>
+              <Button type="button" onClick={ this.props.showRegisterForm }>
                 Rekisteröidy?
               </Button>
             </Form>
@@ -90,4 +90,4 @@ const mapDispatchToProps = {
   showRegisterForm
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(HotspotForm))
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LoginForm))

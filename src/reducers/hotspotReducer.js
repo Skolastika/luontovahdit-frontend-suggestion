@@ -23,13 +23,15 @@ const hotspotReducer = (state = initialState, action) => {
     case 'SET_CURRENT_HOTSPOT':
       return {
         ...state,
-        currentHotspot: state.hotspots.find(hs => hs.id === action.id)
+        currentHotspot: state.hotspots.find(hs => hs.id === action.id),
+        error: null
       }
     case 'ADD_HOTSPOT_SUCCESS':
       return {
         ...state,
         hotspots: state.hotspots.concat(action.hotspot),
-        newHotspot: action.hotspot
+        newHotspot: action.hotspot,
+        error: null
       }
     case 'ADD_HOTSPOT_FAIL':
       return {
@@ -45,7 +47,8 @@ const hotspotReducer = (state = initialState, action) => {
           hs.id === hotspot.id
           ? hotspot
           : hs),
-        currentHotspot: hotspot
+        currentHotspot: hotspot,
+        error: null
       }
     case 'ADD_COMMENT_FAIL':
       return {
