@@ -5,6 +5,7 @@ const initialState = {
   hotspots:  [],
   currentHotspot: null,
   newHotspot: null,
+  newCoordinates: [],
   error: null
 }
 
@@ -26,6 +27,11 @@ const hotspotReducer = (state = initialState, action) => {
         ...state,
         currentHotspot: state.hotspots.find(hs => hs.id === action.id),
         error: null
+      }
+    case 'SET_NEW_COORDINATES':
+      return {
+        ...state,
+        newCoordinates: action.newCoordinates
       }
     case 'ADD_HOTSPOT_SUCCESS':
       return {
@@ -103,6 +109,15 @@ export const initialiseHotspots = () => {
         error: 'Virhe kohteiden haussa! ' + error
       })
     }
+  }
+}
+
+export const setNewCoordinates = (newCoordinates) => {
+  return dispatch => {
+    dispatch({
+      type: 'SET_NEW_COORDINATES',
+      newCoordinates
+    })
   }
 }
 

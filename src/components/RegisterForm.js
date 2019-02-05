@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { Button, Modal, Form, Label, Segment } from 'semantic-ui-react'
-import { hideRegisterForm } from '../reducers/viewReducer'
-import { views } from '../constants'
+import { withRouter } from 'react-router-dom'
+import { routes, appName } from '../constants'
+import { Button, Modal, Form, Segment } from 'semantic-ui-react'
 import loginService from '../services/loginService'
 
 class RegisterForm extends Component {
@@ -11,6 +10,7 @@ class RegisterForm extends Component {
     super(props)
 
     this.state = {
+      open: props.open,
       username: '',
       password: '',
       passwordConf: '',
@@ -22,10 +22,13 @@ class RegisterForm extends Component {
       emailError: false,
       errorMessages: []
     }
+
+    document.title = appName + '- Rekisteröidy'
   }
 
   close = () => {
     this.setState({
+      open: false,
       username: '',
       password: '',
       passwordConf: '',
@@ -37,7 +40,7 @@ class RegisterForm extends Component {
       emailError: false,
       errorMessages: []
     })
-    this.props.hideRegisterForm()
+    this.props.history.push(routes.login)
   }
 
   register = async (event) => {
@@ -93,12 +96,22 @@ class RegisterForm extends Component {
 
       try {
         await loginService.register(userObject)
-        this.props.hideRegisterForm()
+        this.close()
 
       } catch (error) {
         console.log('Virhe rekisteröinnissä...')
         console.log(error)
-        this.setState({ errorMessages: [error] })
+        if (error.response.status === 409) {
+          if (error.response.data.message === 'username or email address already in use ') {
+            this.setState({
+              errorMessages: ['Annettua sähköpostiosoitetta on jo käytetty rekisteröitymiseen.']
+            })
+          } else {
+            this.setState({
+              errorMessages: ['Käyttäjätunnusta ei voitu rekisteröidä. Tarkista tiedot.']
+            })
+          }
+        }
       }
     }
   }
@@ -110,11 +123,11 @@ class RegisterForm extends Component {
   render() {
     const showWhenError = { display: this.state.errorMessages.length > 0 ? '' : 'none' }
 
-    console.log('open ' + this.props.open)
+    console.log('open ' + this.state.open)
     return (
       <div>
         <Modal
-          open={this.props.open}
+          open={this.state.open}
           closeOnDimmerClick={false}
           onClose={this.close}
           closeIcon
@@ -139,13 +152,7 @@ class RegisterForm extends Component {
                   error={ this.state.usernameError }
                   onChange={ this.handleChange }
                   attached='top'
-                />
-                <Label
-                  style={ showWhenError }
-                  basic
-                  pointing='left'
-                  attached='bottom'>Hello</Label>
-                
+                />                
               </Form.Field>
               <div>
                 Salasana:
@@ -194,14 +201,4 @@ class RegisterForm extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    open: state.view.showing === views.REGISTERFORM
-  }
-}
-
-const mapDispatchToProps = {
-  hideRegisterForm
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(RegisterForm)
+export default withRouter(RegisterForm)

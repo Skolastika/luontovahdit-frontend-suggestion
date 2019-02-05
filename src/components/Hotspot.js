@@ -1,16 +1,29 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Button, Modal, Icon, Label, Divider, Segment } from 'semantic-ui-react'
-import { hideHotspot } from '../reducers/viewReducer'
+import { withRouter } from 'react-router-dom'
+import { Button, Modal, Icon, Label, Divider } from 'semantic-ui-react'
 import { upVoteHotspot, downVoteHotspot } from '../reducers/hotspotReducer'
-import { views } from '../constants'
 import Comments from './Comments'
 import Togglable from './Togglable'
 import CommentForm from './CommentForm'
+import { appName } from '../constants'
 
 class Hotspot extends Component {
 
-  close = () => this.props.hideHotspot()
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      open: props.open
+    }
+
+    document.title = appName + '- ' + props.hotspot.title
+  }
+
+  close = () => {
+    this.setState({ open: false })
+    this.props.history.push('/')
+  }
 
   render() {
 
@@ -32,7 +45,7 @@ class Hotspot extends Component {
       return (
         <div>
           <Modal
-            open={ this.props.open }
+            open={ this.state.open }
             closeOnDimmerClick={ false }
             onClose={ this.close }
             closeIcon
@@ -82,7 +95,7 @@ class Hotspot extends Component {
       return (
         <div>
           <Modal
-            open={this.props.open}
+            open={this.state.open}
             closeOnDimmerClick={false}
             onClose={this.close}
             closeIcon
@@ -100,16 +113,13 @@ class Hotspot extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    open: state.view.showing === views.HOTSPOT,
-    hotspot: state.hotspot.currentHotspot,
-    isUserLoggedIn: state.view.isUserLoggedIn
+    isUserLoggedIn: state.user.isUserLoggedIn
   }
 }
 
 const mapDispatchToProps = {
-  hideHotspot,
   upVoteHotspot,
   downVoteHotspot
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Hotspot)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Hotspot))

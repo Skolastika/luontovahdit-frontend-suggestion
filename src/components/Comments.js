@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Segment, Label, Button, Icon, Header, Divider } from 'semantic-ui-react'
+import { Segment, Label, Button, Icon, Divider } from 'semantic-ui-react'
 import { dateFormat } from '../constants'
 import { upVoteComment, downVoteComment } from '../reducers/hotspotReducer'
 

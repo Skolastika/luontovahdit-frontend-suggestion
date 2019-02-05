@@ -1,14 +1,27 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import { Button, Modal, Form, TextArea } from 'semantic-ui-react'
-import { hideHotspotForm } from '../reducers/viewReducer'
 import { addHotspot } from '../reducers/hotspotReducer'
 import { addHotspot as addHotspotToMap } from '../reducers/mapReducer'
-import { views } from '../constants'
+import { appName } from '../constants'
 
 class HotspotForm extends Component {
 
-  close = () => this.props.hideHotspotForm()
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      open: props.open
+    }
+
+    document.title = appName + '- Lisää kohde'
+  }
+
+  close = () => {
+    this.setState({ open: false })
+    this.props.history.push('/')
+  }
 
   addHotspot = async (event) => {
     event.preventDefault()
@@ -37,17 +50,17 @@ class HotspotForm extends Component {
         console.log('Added hotspot!')
         console.log(this.props.newHotspot)
         this.props.addHotspotToMap(this.props.newHotspot)
-        this.props.hideHotspotForm()
+        this.close()
       }
     }
   }
 
   render() {
-    console.log('open ' + this.props.open)
+    console.log('open ' + this.state.open)
     return (
       <div>
         <Modal
-          open={this.props.open}
+          open={this.state.open}
           closeOnDimmerClick={false}
           onClose={this.close}
           closeIcon
@@ -81,17 +94,14 @@ class HotspotForm extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    open: state.view.showing === views.HOTSPOTFORM,
-    coordinates: state.view.newCoordinates,
     newHotspot: state.hotspot.newHotspot,
     error: state.hotspot.error
   }
 }
 
 const mapDispatchToProps = {
-  hideHotspotForm,
   addHotspot,
   addHotspotToMap
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(HotspotForm)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(HotspotForm))

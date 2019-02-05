@@ -1,19 +1,24 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
+import { routes, appName } from '../constants'
 import { Button, Modal, Form, Icon } from 'semantic-ui-react'
-import { hideLoginForm, setUserLoggedIn, showRegisterForm } from '../reducers/viewReducer'
-import { views } from '../constants'
+import { setUserLoggedIn } from '../reducers/userReducer'
 import loginService from '../services/loginService'
 
 class LoginForm extends Component {
 
-  open = () => {
-    this.props.history.push('/login')
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      open: props.open
+    }
+    document.title = appName + '- Kirjaudu'
   }
 
   close = () => {
-    this.props.hideLoginForm()
+    this.setState({ open: false })
     this.props.history.push('/')
   }
 
@@ -28,7 +33,7 @@ class LoginForm extends Component {
           password: event.target.password.value
         })
         this.props.setUserLoggedIn(true)
-        this.props.hideLoginForm()
+        this.close()
       } catch (error) {
         console.log(error)
       }
@@ -40,9 +45,8 @@ class LoginForm extends Component {
     return (
       <div>
         <Modal
-          open={this.props.open}
+          open={this.state.open}
           closeOnDimmerClick={false}
-          onOpen={this.open}
           onClose={this.close}
           closeIcon
         >
@@ -67,9 +71,11 @@ class LoginForm extends Component {
                 Kirjaudu sisään
                 <Icon name='sign in' />
               </Button>
-              <Button type="button" onClick={ this.props.showRegisterForm }>
-                Rekisteröidy?
-              </Button>
+              <Link to={{
+                  pathname: routes.register,
+                  state: { open: true }
+                }}
+              >Rekisteröidy?</Link>
             </Form>
           </Modal.Content>
         </Modal>
@@ -78,16 +84,8 @@ class LoginForm extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    open: state.view.showing === views.LOGINFORM
-  }
-}
-
 const mapDispatchToProps = {
-  hideLoginForm,
-  setUserLoggedIn,
-  showRegisterForm
+  setUserLoggedIn
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LoginForm))
+export default withRouter(connect(null, mapDispatchToProps)(LoginForm))

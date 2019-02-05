@@ -1,11 +1,3 @@
-const views = {
-  MAP: 'MAP',
-  HOTSPOTFORM: 'HOTSPOTFORM',
-  HOTSPOT: 'HOTSPOT',
-  LOGINFORM: 'LOGINFORM',
-  REGISTERFORM: 'REGISTERFORM'
-}
-
 const dateFormat = {
   year: 'numeric',
   month: 'numeric',
@@ -14,4 +6,13 @@ const dateFormat = {
   minute: 'numeric'
 }
 
-export { views, dateFormat }
+const routes = {
+  login: '/kirjaudu',
+  register: '/rekisteroidy',
+  addHotspot: '/lisaa_kohde',
+  hotspots: '/kohteet'
+}
+
+const appName = 'Luontovahdit'
+
+export { dateFormat, routes, appName }

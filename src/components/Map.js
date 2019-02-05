@@ -1,11 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
+import { routes } from '../constants'
 import mapboxgl from 'mapbox-gl'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
 import MapboxLanguage from '@mapbox/mapbox-gl-language'
+import { setNewCoordinates } from '../reducers/hotspotReducer'
 import { addHotspot } from '../reducers/mapReducer'
-import { showHotspotForm, showHotspot } from '../reducers/viewReducer'
-import { setCurrentHotspot } from '../reducers/hotspotReducer'
 
 class Map extends React.Component {
 
@@ -58,8 +59,7 @@ class Map extends React.Component {
 
     this.map.on('click', 'hotspot', (e) => {
       e.originalEvent.cancelBubble = true
-      this.props.setCurrentHotspot(e.features[0].properties.id)
-      this.props.showHotspot()
+      this.props.history.push(routes.hotspots + '/' + e.features[0].properties.id)
     })
 
     this.map.on('click', (e) => {
@@ -68,7 +68,8 @@ class Map extends React.Component {
       }
       console.log(e.lngLat.lng + ' ' + e.lngLat.lat)
       if (this.props.isUserLoggedIn) {
-        this.props.showHotspotForm([ e.lngLat.lng, e.lngLat.lat ])
+        this.props.setNewCoordinates([ e.lngLat.lng, e.lngLat.lat ])
+        this.props.history.push(routes.addHotspot)
       }
 
     })
@@ -105,15 +106,13 @@ class Map extends React.Component {
 const mapStateToProps = (state) => {
   return {
     hotspots: state.map.hotspots,
-    isUserLoggedIn: state.view.isUserLoggedIn
+    isUserLoggedIn: state.user.isUserLoggedIn
   }
 }
 
 const mapDispatchToProps = {
-  addHotspot,
-  showHotspotForm,
-  showHotspot,
-  setCurrentHotspot
+  setNewCoordinates,
+  addHotspot
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Map)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Map))
