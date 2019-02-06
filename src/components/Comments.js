@@ -1,8 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Segment, Label, Button, Icon, Divider } from 'semantic-ui-react'
+import { Segment, Button, Icon, Divider } from 'semantic-ui-react'
 import { dateFormat } from '../constants'
 import { upVoteComment, downVoteComment } from '../reducers/hotspotReducer'
+import VoteButton from './VoteButton'
+import LoginPromptPopup from './LoginPromptPopup'
 
 class Comments extends React.Component {
 
@@ -17,34 +19,26 @@ class Comments extends React.Component {
               <Divider hidden />
               <p>{ comment.content }</p>
               <Divider hidden />
-              <Button as='div' labelPosition='right'>
-                <Button
-                  compact
-                  basic
+              <LoginPromptPopup trigger = {
+                <VoteButton
+                  id={ comment.id }
+                  vote={ this.props.upVoteComment }
+                  votes={ comment.upVotes }
                   color='green'
-                  type='button'
-                  onClick={ () => this.props.upVoteComment(comment.id) }
-                >
-                  <Icon name='thumbs up' />
-                </Button>
-                <Label basic pointing='left'>
-                  { comment.upVotes }
-                </Label>
-              </Button>
-              <Button as='div' labelPosition='right'>
-                <Button
-                  compact
-                  basic
+                  icon='thumbs up'
+                  compact={ true }
+                />
+              } />
+              <LoginPromptPopup trigger = {
+                <VoteButton
+                  id={ comment.id }
+                  vote={ this.props.downVoteComment }
+                  votes={ comment.downVotes }
                   color='orange'
-                  type='button'
-                  onClick={ () => this.props.downVoteComment(comment.id) }
-                >
-                  <Icon name='thumbs down' />
-                </Button>
-                <Label as='a' basic pointing='left'>
-                  { comment.downVotes }
-                </Label>
-              </Button>
+                  icon='thumbs down'
+                  compact={ true }
+                />
+              } />
               <Button compact basic color='red'>
                   <Icon name='flag' />
               </Button>
@@ -57,15 +51,9 @@ class Comments extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    hs: state.hotspot.currentHotspot
-  }
-}
-
 const mapDispatchToProps = {
   upVoteComment,
   downVoteComment
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Comments)
+export default connect(null, mapDispatchToProps)(Comments)

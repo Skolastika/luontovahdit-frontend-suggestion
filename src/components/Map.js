@@ -1,12 +1,14 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom'
+import { withRouter, Link } from 'react-router-dom'
 import { routes } from '../constants'
 import mapboxgl from 'mapbox-gl'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
 import MapboxLanguage from '@mapbox/mapbox-gl-language'
 import { setNewCoordinates } from '../reducers/hotspotReducer'
 import { addHotspot } from '../reducers/mapReducer'
+import { Icon } from 'semantic-ui-react'
 
 class Map extends React.Component {
 
@@ -70,6 +72,12 @@ class Map extends React.Component {
       if (this.props.isUserLoggedIn) {
         this.props.setNewCoordinates([ e.lngLat.lng, e.lngLat.lat ])
         this.props.history.push(routes.addHotspot)
+      } else {
+        // TODO: add styles for .mapboxgl-popup
+        new mapboxgl.Popup()
+          .setLngLat(e.lngLat)
+          .setHTML(`<a href="${ routes.login }">Kirjaudu sisään?</a>`)
+          .addTo(this.map)
       }
 
     })

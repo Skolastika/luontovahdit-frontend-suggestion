@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { Button, Modal, Icon, Label, Divider } from 'semantic-ui-react'
+import { Button, Modal, Icon, Divider, Popup } from 'semantic-ui-react'
 import { upVoteHotspot, downVoteHotspot } from '../reducers/hotspotReducer'
 import Comments from './Comments'
 import Togglable from './Togglable'
 import CommentForm from './CommentForm'
+import VoteButton from './VoteButton'
+import LoginPromptPopup from './LoginPromptPopup'
 import { appName } from '../constants'
 
 class Hotspot extends Component {
@@ -17,7 +19,9 @@ class Hotspot extends Component {
       open: props.open
     }
 
-    document.title = appName + '- ' + props.hotspot.title
+    if (props.hotspot) {
+      document.title = appName + '- ' + props.hotspot.title
+    }
   }
 
   close = () => {
@@ -52,36 +56,27 @@ class Hotspot extends Component {
           >
             <Modal.Header>{ hs.title }</Modal.Header>
             <Modal.Content>
-              <Button as='div' labelPosition='right'>
-                <Button
-                  basic
+              <LoginPromptPopup trigger={
+                <VoteButton
+                  id={ hs.id }
+                  vote={ this.props.upVoteHotspot }
+                  votes={ hs.upVotes }
                   color='green'
-                  type='button'
-                  onClick={ () => this.props.upVoteHotspot(hs.id) }
-                >
-                  <Icon name='thumbs up' />
-                </Button>
-                <Label as='a' basic pointing='left'>
-                  { hs.upVotes }
-                </Label>
-              </Button>
-              <Button as='div' labelPosition='right'>
-                <Button
-                  basic
+                  icon='thumbs up'
+                />
+              } />
+              <LoginPromptPopup trigger={
+                <VoteButton
+                  id={ hs.id }
+                  vote={ this.props.downVoteHotspot }
+                  votes={ hs.downVotes }
                   color='orange'
-                  type='button'
-                  onClick={ () => this.props.downVoteHotspot(hs.id) }
-                >
-                  <Icon name='thumbs down' />
-                </Button>
-                <Label as='a' basic pointing='left'>
-                  { hs.downVotes }
-                </Label>
-              </Button>
+                  icon='thumbs down'
+                />
+               } />
               <Button basic color='red'>
-                  <Icon name='flag' />
+                    <Icon name='flag' />
               </Button>
-              lisännyt { hs.addedBy.name }
               <Divider hidden />
               { hs.description }
               <Divider hidden />
