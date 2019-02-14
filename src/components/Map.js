@@ -12,31 +12,55 @@ import { Icon } from 'semantic-ui-react'
 
 class Map extends React.Component {
 
-  componentDidMount() {
+  async componentDidMount() {
 
     mapboxgl.accessToken = process.env.REACT_APP_MAPTOKEN
 
     // restrict map to Finland
-    const bounds = [
-      [19.274990495527675, 59.64523662578557], // Southwest coordinates
-      [31.618656929369678, 70.13546651354179]  // Northeast coordinates
-    ];
+    // [west, south, east, north] 
+    const bounds = [ 19.274990495527675, 59.64523662578557,
+      31.618656929369678, 70.13546651354179]
 
     this.map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v9',
-      center: [24.7385109, 60.11021],  // TODO: should update to use user location if available
-      zoom: 8,
+      center: [24.7385109, 60.11021], // default to approximately Helsinki
+      zoom: 10,
       maxBounds: bounds
     })
 
+    const locateSuccess = (position) => {
+      this.map = this.map.setCenter([position.coords.longitude, position.coords.latitude])
+    }
+
+    const locateFail = (error) => console.log(error)
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(locateSuccess, locateFail)
+    }
+
     this.map.addControl(new MapboxLanguage({  defaultLanguage: 'mul' }))
 
-    this.map.addControl(new MapboxGeocoder({
+
+    // Geocoder
+
+    const geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
-      language: 'fi',
+      language: 'FI',
+      country: 'FI',
+      bbox: bounds,
       placeholder: 'Etsi...'
-    }))
+    })
+
+    geocoder.on('result', (e) => {
+      console.log(e)
+      console.log(e.result.geometry.coordinates)
+    })
+
+    this.map.addControl(geocoder)
+
+
+    // Map events
 
     this.map.on('load', () => {
       this.map.addSource('hotspots', {
