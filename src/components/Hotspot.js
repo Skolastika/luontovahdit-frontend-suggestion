@@ -77,6 +77,7 @@ class Hotspot extends Component {
               <Button basic color='red'>
                     <Icon name='flag' />
               </Button>
+              <span style={ { paddingLeft: '5px' } }>lisännyt { hs.addedBy.name }</span>
               <Divider hidden />
               { hs.description }
               <Divider hidden />

@@ -71,11 +71,13 @@ class LoginForm extends Component {
                 Kirjaudu sisään
                 <Icon name='sign in' />
               </Button>
-              <Link to={{
-                  pathname: routes.register,
-                  state: { open: true }
-                }}
-              >Rekisteröidy?</Link>
+              <span style={ { paddingLeft: '5px' } }>
+                <Link to={{
+                    pathname: routes.register,
+                    state: { open: true }
+                  }}
+                >Rekisteröidy?</Link>
+              </span>
             </Form>
           </Modal.Content>
         </Modal>
