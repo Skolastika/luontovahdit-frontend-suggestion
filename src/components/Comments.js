@@ -11,39 +11,36 @@ class Comments extends React.Component {
   constructor(props) {
     super(props)
 
+    this.sortOrder = () => {}
     this.state = {
-      comments: props.comments
+      selectedSort: 'vanhin'
     }
   }
 
   sortComments = (event, data) => {
     event.preventDefault()
-    const sortedComments = this.state.comments
-    console.log(event.target.value)
-    console.log(event)
-    console.log(data)
-    const sortOrder = data.value === 'vanhin'
-      ? (a, b) => {
-          if (new Date(a.createdAt).getTime() > new Date(b.createdAt).getTime()) {
-            return 1
-          } else {
-            return -1
-          }
+    this.setState({ selectedSort: data.value })
+    this.sortOrder = data.value === 'vanhin'
+    ? (a, b) => {
+        if (new Date(a.createdAt).getTime() > new Date(b.createdAt).getTime()) {
+          return 1
+        } else {
+          return -1
         }
-      : (a, b) => {
-          if (new Date(a.createdAt).getTime() < new Date(b.createdAt).getTime()) {
-            return 1
-          }
-          else {
-            return -1
-          }
+      }
+    : (a, b) => {
+        if (new Date(a.createdAt).getTime() < new Date(b.createdAt).getTime()) {
+          return 1
         }
-    sortedComments.sort(sortOrder)
-    this.setState({ comments: sortedComments })
+        else {
+          return -1
+        }
+      }
+      console.log(this.sortOrder)
   }
 
   render() {
-    console.log(this.props)
+
     return (
       <div>
         <div style={{ paddingBottom: '20px' }}>
@@ -66,7 +63,7 @@ class Comments extends React.Component {
         />
         </div>
         <Divider hidden />
-        { this.state.comments.map(comment =>
+        { [].concat(this.props.comments).sort(this.sortOrder).map(comment =>
           <div key={ comment.id }>
             <Segment>
               { new Date(comment.createdAt).toLocaleDateString('fi-FI', dateFormat) } lisännyt { comment.addedBy.displayname }
